@@ -17,42 +17,28 @@ This repository contains:
 NucMetrics is a single-file ImageJ/Fiji macro toolset that computes three DNA staining-based image metrics directly within Fiji, with no programming required.
 
 **Metrics:**
-- **CV** (Coefficient of Variation) — computed from raw pixel intensities
-- **1-Gini** (complement of Gini coefficient) — computed from min-max normalized intensities
-- **DSI** (Diffuse Signal Index) — computed from min-max normalized intensities
+- **CV** (Coefficient of Variation) — from raw pixel intensities
+- **1-Gini** (complement of Gini coefficient) — from min-max normalized intensities
+- **DSI** (Diffuse Signal Index) — from min-max normalized intensities
 
 **Modes:**
 
 | Mode | Description |
 |------|-------------|
-| Current Selection | Draw a freehand or polygon ROI on a nucleus |
+| Current Selection | Draw an ROI on a nucleus manually |
 | ROI Manager | Batch-process multiple pre-defined ROIs |
-| Binary Mask | Import an external segmentation mask |
-| Auto-Segmentation | Automatic thresholding (Li, Otsu, or Triangle) |
+| Binary Mask | Use an external binary mask image (single slice or matched stack) |
+| Auto-Generate Binary Mask | Automatic thresholding, mask review, then compute (single slice or entire series) |
 
-### Installation
+### Quick start
 
 1. Download [`NucMetrics/NucMetrics_Toolset.ijm`](NucMetrics/NucMetrics_Toolset.ijm)
 2. Copy to `Fiji.app/macros/toolsets/`
-3. Restart Fiji
-4. Click `>>` on the toolbar and select **NucMetrics_Toolset**
+3. Restart Fiji, click `>>` on the toolbar, select **NucMetrics_Toolset**
 
-**Requirements:** Fiji (ImageJ 1.53b or later). No additional plugins or dependencies.
+See [`NucMetrics/README.md`](NucMetrics/README.md) for detailed documentation.
 
-### Usage
-
-1. Open a DNA-stained image in Fiji
-2. Click the NucMetrics icon on the toolbar
-3. Select a mode and set the DSI threshold (default: τ = 0.3)
-4. Results appear in the ImageJ Results table
-
-### Parameters
-
-| Parameter | Default | Description |
-|-----------|---------|-------------|
-| DSI threshold (τ) | 0.3 | Normalized intensity threshold for DSI |
-| Min nucleus area | 30 px | Minimum object size for auto-segmentation |
-| Auto-threshold method | Li | Thresholding algorithm (Li, Otsu, or Triangle) |
+**Requirements:** Fiji or ImageJ (1.53b or later). No additional plugins or dependencies.
 
 ## Figure scripts
 
