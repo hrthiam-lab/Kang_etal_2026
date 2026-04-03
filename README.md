@@ -14,7 +14,9 @@ This repository contains:
 
 ## NucMetrics
 
-NucMetrics is a single-file ImageJ/Fiji macro toolset that computes three DNA staining-based image metrics directly within Fiji, with no programming required.
+NucMetrics is a single-file ImageJ/Fiji macro toolset that computes three DNA
+staining-based image metrics that quantify intranuclear signal distribution as
+a readout of chromatin organization, directly within Fiji with no programming required.
 
 **Metrics:**
 - **CV** (Coefficient of Variation) — from raw pixel intensities
