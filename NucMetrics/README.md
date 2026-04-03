@@ -10,7 +10,8 @@ NucMetrics computes three metrics from nuclear DNA staining images:
 ## Installation
 
 1. Download `NucMetrics_Toolset.ijm`
-2. Copy it to your Fiji (or ImageJ) installation: `Fiji.app/macros/toolsets/`
+2. Copy to `Fiji.app/macros/toolsets/` 
+   ⚠️ **Important:** The file must be in the `toolsets` subfolder inside `macros`, NOT in `macros` directly. If placed in the wrong folder, the toolset will not appear in the >> menu.
 3. Restart Fiji/ImageJ
 4. Click `>>` on the toolbar and select **NucMetrics_Toolset**
 5. The NucMetrics icon appears on the toolbar — click to run
