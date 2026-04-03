@@ -22,6 +22,7 @@ NucMetrics is a single-file ImageJ/Fiji macro toolset that computes three DNA st
 - **DSI** (Diffuse Signal Index) — from min-max normalized intensities
 
 **Modes:**
+> ⚠️ Whole-stack mode supports single-nucleus stacks only. See [NucMetrics/README.md](NucMetrics/README.md) for details on multi-nuclei data.
 
 | Mode | Description |
 |------|-------------|

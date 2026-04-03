@@ -20,6 +20,8 @@ NucMetrics computes three metrics from nuclear DNA staining images:
 
 ## Modes
 
+> ⚠️ **Stack processing note:** For single time-point images, multiple nuclei per field of view are fully supported. For time-series (stack) data, the field of view should contain a **single nucleus** — whole-stack mode does not perform multi-object tracking across time points. For multi-nuclei time-lapse data, either (1) crop individual nuclei into separate single-nucleus stacks, or (2) generate per-nucleus binary mask stacks using your own segmentation/tracking pipeline, then use Mode 3 (Binary Mask, whole stack) to compute metrics.
+
 ### Mode 1: Current Selection
 
 Draw a freehand, polygon, or oval ROI around a nucleus, then run NucMetrics. If no ROI is drawn, NucMetrics will activate the Freehand tool and prompt you to draw one.
