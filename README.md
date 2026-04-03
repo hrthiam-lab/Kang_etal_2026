@@ -33,8 +33,9 @@ NucMetrics is a single-file ImageJ/Fiji macro toolset that computes three DNA st
 ### Quick start
 
 1. Download [`NucMetrics/NucMetrics_Toolset.ijm`](NucMetrics/NucMetrics_Toolset.ijm)
-2. Copy to `Fiji.app/macros/toolsets/` 
-   ⚠️ **Important:** The file must be in the `toolsets` subfolder inside `macros`, NOT in `macros` directly. If placed in the wrong folder, the toolset will not appear in the >> menu.3. Restart Fiji, click `>>` on the toolbar, select **NucMetrics_Toolset**
+2. Copy to `Fiji.app/macros/toolsets/`
+   > ⚠️ **Important:** The file must be in the `toolsets` subfolder inside `macros`, NOT in `macros` directly. If placed in the wrong folder, the toolset will not appear in the >> menu.
+3. Restart Fiji, click `>>` on the toolbar, select **NucMetrics_Toolset**
 
 See [`NucMetrics/README.md`](NucMetrics/README.md) for detailed documentation.
 
