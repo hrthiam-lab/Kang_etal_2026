@@ -10,13 +10,15 @@ This repository contains:
 
 - **NucMetrics** — an ImageJ/Fiji macro toolset for computing CV, 1-Gini, and DSI on DNA-stained nuclear images
 - **Figure scripts** — Python scripts for reproducing all figures in the manuscript
-- **Example data** — sample images for testing
+- **Example data** — sample images and masks for testing NucMetrics and validating outputs against the Python analysis code
 
 ## NucMetrics
 
 NucMetrics is a single-file ImageJ/Fiji macro toolset that computes three DNA
 staining-based image metrics that quantify intranuclear signal distribution as
 a readout of chromatin organization, directly within Fiji with no programming required.
+
+![NucMetrics toolbar icon](NucMetrics/NucMetrics_toolbar.png)
 
 **Metrics:**
 - **CV** (Coefficient of Variation) — from raw pixel intensities
@@ -35,12 +37,28 @@ a readout of chromatin organization, directly within Fiji with no programming re
 
 ### Quick start
 
-1. Download [`NucMetrics/NucMetrics_Toolset.ijm`](NucMetrics/NucMetrics_Toolset.ijm)
-2. Copy to `Fiji.app/macros/toolsets/`
-   > ⚠️ **Important:** The file must be in the `toolsets` subfolder inside `macros`, NOT in `macros` directly. If placed in the wrong folder, the toolset will not appear in the >> menu.
-3. Restart Fiji, click `>>` on the toolbar, select **NucMetrics_Toolset**
+There are two ways to install NucMetrics. See [NucMetrics/README.md](NucMetrics/README.md) for full documentation and a tutorial.
 
-See [`NucMetrics/README.md`](NucMetrics/README.md) for detailed documentation.
+**Method A — Install to toolsets folder (recommended for repeated use):**
+
+1. Download [`NucMetrics/NucMetrics_Toolset.ijm`](NucMetrics/NucMetrics_Toolset.ijm)
+2. Save it in the Fiji application folder at: **`Fiji.app/macros/toolsets/NucMetrics_Toolset.ijm`**
+
+   | OS | Full path |
+   |----|-----------|
+   | macOS | `/Applications/Fiji.app/macros/toolsets/NucMetrics_Toolset.ijm` |
+   | Windows | `C:\Fiji.app\macros\toolsets\NucMetrics_Toolset.ijm` |
+   | Linux | `~/Fiji.app/macros/toolsets/NucMetrics_Toolset.ijm` |
+
+   > ⚠️ The file must be inside the **`toolsets`** subfolder, NOT directly in `macros`.
+
+3. Click `>>` on the toolbar and select **NucMetrics_Toolset** — no restart required
+4. Open a DNA-stained image, then click the NucMetrics icon to run
+
+**Method B — Temporary install (current session only):**
+
+1. In Fiji, go to `Plugins > Macros > Install...` and select the downloaded `.ijm` file
+2. The NucMetrics icon appears on the toolbar for the current session
 
 **Requirements:** Fiji or ImageJ (1.53b or later). No additional plugins or dependencies.
 
@@ -61,13 +79,14 @@ Python scripts for generating all manuscript figures are in the [`Figures/`](Fig
 Kang_2026_DSI_paper/
 ├── NucMetrics/
 │   ├── NucMetrics_Toolset.ijm    # Fiji macro toolset
-│   └── README.md                 # Detailed NucMetrics documentation
+│   ├── NucMetrics_toolbar.png    # Toolbar icon screenshot
+│   └── README.md                 # Detailed documentation and tutorial
 ├── Figures/
 │   ├── fig1_metric_explanation.py
 │   ├── fig2_live_cell_tracking.py
 │   ├── fig3_tn5_correlation.py
 │   └── suppfig1_threshold_sweep.py
-├── example_data/                 # Sample images for testing
+├── example_data/                 # Sample images and masks for testing and validation
 ├── LICENSE
 └── README.md
 ```

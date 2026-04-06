@@ -9,14 +9,87 @@ NucMetrics computes three metrics from nuclear DNA staining images:
 
 ## Installation
 
+There are two ways to install NucMetrics. **Method A** is recommended for repeated use.
+
+### Method A: Install to the toolsets folder (recommended)
+
+This makes NucMetrics permanently available in the `>>` toolbar menu.
+
 1. Download `NucMetrics_Toolset.ijm`
-2. Copy to `Fiji.app/macros/toolsets/`
-   > ⚠️ **Important:** The file must be in the `toolsets` subfolder inside `macros`, NOT in `macros` directly. If placed in the wrong folder, the toolset will not appear in the >> menu.
-3. Restart Fiji/ImageJ
-4. Click `>>` on the toolbar and select **NucMetrics_Toolset**
-5. The NucMetrics icon appears on the toolbar — click to run
+2. Save it in the Fiji application folder at:
+
+   **`Fiji.app/macros/toolsets/NucMetrics_Toolset.ijm`**
+
+   The typical full path by operating system:
+
+   | OS | Full path |
+   |----|-----------|
+   | **macOS** | `/Applications/Fiji.app/macros/toolsets/NucMetrics_Toolset.ijm` |
+   | **Windows** | `C:\Fiji.app\macros\toolsets\NucMetrics_Toolset.ijm` |
+   | **Linux** | `~/Fiji.app/macros/toolsets/NucMetrics_Toolset.ijm` |
+
+   > **💡 Don't know where Fiji is installed?** Open Fiji, go to `Plugins > Macros > Edit...`. The file browser opens inside the `macros` folder. You should see a subfolder called `toolsets` — that's where the file goes. If you don't see it, you can create it.
+
+   > ⚠️ **Common mistake:** The file must be inside the **`toolsets`** subfolder, NOT directly in `macros`. If placed in the wrong folder, the toolset will not appear in the `>>` menu.
+
+3. Open Fiji (no restart needed if already open). Click the **`>>`** button on the right end of the toolbar and select **NucMetrics_Toolset**.
+
+4. The NucMetrics icon appears on the toolbar:
+
+   ![NucMetrics toolbar icon](NucMetrics_toolbar.png)
+
+> **Note:** Each time you open Fiji, you need to click `>>` and select NucMetrics_Toolset to load it into the toolbar. The same procedure can be used for ImageJ.
+
+### Method B: Temporary install via menu (quick start)
+
+This loads NucMetrics for the current session only. You will need to repeat this each time you open Fiji.
+
+1. Download `NucMetrics_Toolset.ijm` to any location on your computer
+2. In Fiji, go to `Plugins > Macros > Install...`
+3. Navigate to and select `NucMetrics_Toolset.ijm`
+4. The NucMetrics icon appears on the toolbar for the current session
+
+### First use
+
+> ⚠️ **Important:** Always open a DNA-stained image **before** clicking the NucMetrics icon. If no image is open, NucMetrics will show an error.
+
+1. Open a DNA-stained image in Fiji (`File > Open...`)
+2. Click the NucMetrics icon on the toolbar (or press `1` on the numpad)
+3. Select a mode, set the DSI threshold (tau), and click OK
 
 **Requirements:** Fiji or ImageJ (1.53b or later). No additional plugins or dependencies.
+
+## Tutorial: Quick test with example data
+
+Try NucMetrics using the example images provided in this repository.
+
+### Test 1: Single nucleus with Mode 1 (Current Selection)
+
+1. Open `example_data/From080124_Dish3_Compact_100x100cropped.tif` in Fiji
+2. Click the NucMetrics icon
+3. Select **Current Selection** mode, keep tau = 0.3, click OK
+4. NucMetrics will prompt you to draw an ROI — draw a freehand selection around the nucleus, then click OK
+5. Check the Results table. Expected values (approximate):
+   - CV ≈ 0.58, 1-Gini ≈ 0.62, DSI ≈ 0.37
+
+### Test 2: Single nucleus with Mode 3 (Binary Mask)
+
+1. Open `example_data/From080124_Dish3_Compact_100x100cropped.tif` in Fiji
+2. Also open `example_data/From080124_Dish3_Compact_100x100cropped_mask.tif`
+3. Click on the original image window to make it active
+4. Click the NucMetrics icon
+5. Select **Binary Mask** mode → select the mask image from the dropdown → click OK
+6. Check the Results table for CV, 1-Gini, and DSI values
+
+### Test 3: Multiple nuclei with Mode 4 (Auto-Generate Binary Mask)
+
+1. Open any multi-nuclei DNA-stained image in Fiji
+2. Click the NucMetrics icon
+3. Select **Auto-Generate Binary Mask** mode → choose a threshold method (Li is recommended) → click OK
+4. Review the generated mask in the new window
+5. Click OK to compute metrics, or Cancel to keep the mask for manual editing
+
+> **Validation:** The example images are the same ones used in Fig. 1 of the manuscript. NucMetrics outputs on these images have been validated against the Python analysis code to produce identical CV, 1-Gini, and DSI values.
 
 ## Modes
 
