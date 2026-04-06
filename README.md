@@ -47,7 +47,7 @@ There are two ways to install NucMetrics. See [NucMetrics/README.md](NucMetrics/
    | OS | Full path |
    |----|-----------|
    | macOS | `/Applications/Fiji.app/macros/toolsets/NucMetrics_Toolset.ijm` |
-   | Windows | `C:\Fiji.app\macros\toolsets\NucMetrics_Toolset.ijm` |
+   | Windows | `C:\Users\<YounrName>\Fiji.app\macros\toolsets\NucMetrics_Toolset.ijm` |
    | Linux | `~/Fiji.app/macros/toolsets/NucMetrics_Toolset.ijm` |
 
    > ⚠️ The file must be inside the **`toolsets`** subfolder, NOT directly in `macros`.
