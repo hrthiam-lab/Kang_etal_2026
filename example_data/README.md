@@ -25,10 +25,15 @@ This makes NucMetrics permanently available in the `>>` toolbar menu.
    | OS | Full path |
    |----|-----------|
    | **macOS** | `/Applications/Fiji.app/macros/toolsets/NucMetrics_Toolset.ijm` |
-   | **Windows** | `C:\Users\<YourName>\Fiji.app\macros\toolsets\NucMetrics_Toolset.ijm` |
+   | **Windows** | `C:\Fiji.app\macros\toolsets\NucMetrics_Toolset.ijm` |
    | **Linux** | `~/Fiji.app/macros/toolsets/NucMetrics_Toolset.ijm` |
 
-   > **💡 Don't know where Fiji is installed?** Open Fiji, go to `Plugins > Macros > Edit...`. The file browser opens inside the `macros` folder. You should see a subfolder called `toolsets` — that's where the file goes. If you don't see it, you can create it.
+   > **💡 Don't know where Fiji is installed?**
+   > - **macOS:** Right-click `Fiji.app` in Applications → **Show Package Contents** → `macros` → `toolsets`
+   > - **Windows:** Press the Start key and type `fiji.exe`. Right-click the result and select **Open file location** to open the `Fiji.app` folder → `macros` → `toolsets`
+   > - **Linux:** Open the `Fiji.app` directory → `macros` → `toolsets`
+   >
+   > ℹ️ This is **not** the same as `Plugins > Macros` in the Fiji menu, which points to a different folder (`plugins/Macros`). The correct location is the `macros/toolsets` folder at the top level of the Fiji installation directory.
 
    > ⚠️ **Common mistake:** The file must be inside the **`toolsets`** subfolder, NOT directly in `macros`. If placed in the wrong folder, the toolset will not appear in the `>>` menu.
 
