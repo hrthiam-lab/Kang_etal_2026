@@ -17,21 +17,16 @@ This makes NucMetrics permanently available in the `>>` toolbar menu.
 
 1. Download `NucMetrics_Toolset.ijm`
 2. Save it in the Fiji application folder at:
-
+ 
    **`Fiji.app/macros/toolsets/NucMetrics_Toolset.ijm`**
-
-   The typical full path by operating system:
-
-   | OS | Full path |
-   |----|-----------|
-   | **macOS** | `/Applications/Fiji.app/macros/toolsets/NucMetrics_Toolset.ijm` |
-   | **Windows** | `C:\Users\<YourName>\Fiji.app\macros\toolsets\NucMetrics_Toolset.ijm` |
-   | **Linux** | `~/Fiji.app/macros/toolsets/NucMetrics_Toolset.ijm` |
-
-   > **💡 Don't know where Fiji is installed?** Open Fiji, go to `Plugins > Macros > Edit...`. The file browser opens inside the `macros` folder. You should see a subfolder called `toolsets` — that's where the file goes. If you don't see it, you can create it.
-
-   > ⚠️ **Common mistake:** The file must be inside the **`toolsets`** subfolder, NOT directly in `macros`. If placed in the wrong folder, the toolset will not appear in the `>>` menu.
-
+ 
+   > **💡 How to find the `toolsets` folder:**
+   > - **macOS:** In Finder, locate `Fiji.app` (check your `Downloads`, `Applications`, or wherever you saved it). Right-click → **Show Package Contents** → `macros` → `toolsets`. If Fiji is in your Dock, right-click the Dock icon → `Options` → `Show in Finder`.
+   > - **Windows:** Press the Start key and type `fiji`. Right-click the result → **Open file location** to open the `Fiji.app` folder → `macros` → `toolsets`
+   > - **Linux:** Open the `Fiji.app` directory → `macros` → `toolsets`
+   >
+   > ⚠️ The file must be inside the **`toolsets`** subfolder, NOT directly in `macros`. This is also **not** the same as `Plugins > Macros` in the Fiji menu, which points to a different folder (`plugins/Macros`).
+ 
 3. Open Fiji (no restart needed if already open). Click the **`>>`** button on the right end of the toolbar and select **NucMetrics_Toolset**.
 
 4. The NucMetrics icon appears on the toolbar:
