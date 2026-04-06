@@ -25,7 +25,7 @@ This makes NucMetrics permanently available in the `>>` toolbar menu.
    | OS | Full path |
    |----|-----------|
    | **macOS** | `/Applications/Fiji.app/macros/toolsets/NucMetrics_Toolset.ijm` |
-   | **Windows** | `C:\Fiji.app\macros\toolsets\NucMetrics_Toolset.ijm` |
+   | **Windows** | `C:\Users\<YourName>\Fiji.app\macros\toolsets\NucMetrics_Toolset.ijm` |
    | **Linux** | `~/Fiji.app/macros/toolsets/NucMetrics_Toolset.ijm` |
 
    > **💡 Don't know where Fiji is installed?** Open Fiji, go to `Plugins > Macros > Edit...`. The file browser opens inside the `macros` folder. You should see a subfolder called `toolsets` — that's where the file goes. If you don't see it, you can create it.
@@ -65,7 +65,7 @@ Try NucMetrics using the example images provided in this repository.
 
 ### Test 1: Single nucleus with Mode 1 (Current Selection)
 
-1. Open `example_data/From080124_Dish3_Compact_100x100cropped.tif` in Fiji
+1. Open `example_data/compact.tif` in Fiji
 2. Click the NucMetrics icon
 3. Select **Current Selection** mode, keep tau = 0.3, click OK
 4. NucMetrics will prompt you to draw an ROI — draw a freehand selection around the nucleus, then click OK
@@ -74,22 +74,24 @@ Try NucMetrics using the example images provided in this repository.
 
 ### Test 2: Single nucleus with Mode 3 (Binary Mask)
 
-1. Open `example_data/From080124_Dish3_Compact_100x100cropped.tif` in Fiji
-2. Also open `example_data/From080124_Dish3_Compact_100x100cropped_mask.tif`
-3. Click on the original image window to make it active
+1. Open `example_data/compact.tif` in Fiji
+2. Also open `example_data/compact_mask.tif`
+3. Click on the 'compact.tif' image window to make it active
 4. Click the NucMetrics icon
-5. Select **Binary Mask** mode → select the mask image from the dropdown → click OK
+5. Select **Binary Mask** mode → select the mask image from the dropdown (compact_mask.tif)→ click OK
 6. Check the Results table for CV, 1-Gini, and DSI values
 
 ### Test 3: Multiple nuclei with Mode 4 (Auto-Generate Binary Mask)
 
-1. Open any multi-nuclei DNA-stained image in Fiji
+1. Open `example_data/multiple_nuc.tif` in Fiji
 2. Click the NucMetrics icon
-3. Select **Auto-Generate Binary Mask** mode → choose a threshold method (Li is recommended) → click OK
+3. Select **Auto-Generate Binary Mask** mode → choose a threshold method (Li is the default and works well for this example; try Li, Otsu, or Triangle and compare) → click OK
 4. Review the generated mask in the new window
 5. Click OK to compute metrics, or Cancel to keep the mask for manual editing
 
-> **Validation:** The example images are the same ones used in Fig. 1 of the manuscript. NucMetrics outputs on these images have been validated against the Python analysis code to produce identical CV, 1-Gini, and DSI values.
+> **Tip:** The built-in auto-thresholding may not work well for all datasets. If you have a segmentation pipeline that produces better masks for your data, save the mask as a binary image and use **Mode 3 (Binary Mask)** instead.
+
+> **Validation:** The example images (`compact.tif`, `decompact.tif`) are the same ones used in Fig. 1 of the manuscript. NucMetrics outputs on these images have been validated against the Python analysis code to produce identical CV, 1-Gini, and DSI values.
 
 ## Modes
 
