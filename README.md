@@ -1,4 +1,4 @@
-# Kang_2026_DSI_paper
+# Kang_etal,2026
 
 Code for figure generation, CV/1-Gini/DSI analysis, and the **NucMetrics** ImageJ/Fiji toolset accompanying:
 
