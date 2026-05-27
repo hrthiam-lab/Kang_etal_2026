@@ -35,6 +35,8 @@ a readout of chromatin organization, directly within Fiji with no programming re
 | Binary Mask | Use an external binary mask image (single slice or matched stack) |
 | Auto-Generate Binary Mask | Automatic thresholding, mask review, then compute (single slice or entire series) |
 
+> 💡 **Trajectory quantification:** Modes 3 and 4 support whole-stack batch processing for time-lapse movies, enabling frame-by-frame metric computation for trajectory analysis. See the [trajectory quantification workflow](NucMetrics/README.md#trajectory-quantification-workflow) in the NucMetrics documentation.
+
 ### Quick start
 
 There are two ways to install NucMetrics. See [NucMetrics/README.md](NucMetrics/README.md) for full documentation and a tutorial.

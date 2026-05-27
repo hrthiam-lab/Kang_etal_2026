@@ -88,6 +88,54 @@ Try NucMetrics using the example images provided in this repository.
 
 > **Validation:** The example images (`compact.tif`, `decompact.tif`) are the same ones used in Fig. 1 of the manuscript. NucMetrics outputs on these images have been validated against the Python analysis code to produce identical CV, 1-Gini, and DSI values.
 
+### Test 4: Time-lapse trajectory with Mode 4 (whole-stack processing)
+
+This test demonstrates frame-by-frame batch processing of an entire time-lapse movie for trajectory quantification.
+
+1. Open `example_data/Single_nuc_timlapse.tif` in Fiji (a 49-frame time-lapse of a single dHL-60 nucleus undergoing NETosis)
+2. Click the NucMetrics icon
+3. Select **Auto-Generate Binary Mask** mode → click OK
+4. In the settings dialog:
+   - **Threshold method:** Li (default)
+   - **Min nucleus area:** 30 (default)
+   - Under **Stack options**, check **"Generate mask for an entire series"**
+   - Click OK
+5. NucMetrics generates a binary mask stack for all 49 frames and displays it in a new window
+6. Scroll through the mask stack to verify segmentation quality across time points
+7. Click **OK** in the "Review Auto Mask" dialog to compute metrics
+8. The Results table now contains 49 rows, labeled `T001_N1` through `T049_N1`, with CV, 1-Gini, and DSI for each frame
+9. Export the Results table (`File > Save As...`) for trajectory plotting in Python, R, or Excel
+
+> **Note:** This is the recommended workflow for trajectory-level analysis. The same approach works with Mode 3 (Binary Mask) if you have pre-made mask stacks from an external segmentation pipeline.
+
+## Trajectory quantification workflow
+
+NucMetrics supports frame-by-frame batch processing of time-lapse stacks for trajectory-level analysis. This is useful for tracking how CV, 1-Gini, and DSI change over time in a single nucleus (e.g., during NETosis, mitotic exit, or drug treatment).
+
+### Step-by-step: Time-lapse trajectory analysis
+
+1. **Prepare a single-nucleus stack.** Crop your time-lapse movie so that each stack contains one nucleus across all time points.
+
+2. **Open the stack in Fiji** (`File > Open...`)
+
+3. **Choose a processing mode:**
+
+   **Option A — Auto-generate masks (Mode 4):**
+   - Click the NucMetrics icon → select **Auto-Generate Binary Mask**
+   - Select **Entire series** when prompted
+   - Review the generated mask stack → click OK to compute metrics
+
+   **Option B — Use pre-made masks (Mode 3):**
+   - Open your binary mask stack alongside the image stack (must have matching dimensions)
+   - Click the NucMetrics icon → select **Binary Mask**
+   - Select the mask from the dropdown → check **Whole stack** → click OK
+
+4. **Read the Results table.** Each time point appears as a row labeled `T001_N1`, `T002_N1`, `T003_N1`, etc.
+
+5. **Export for downstream analysis.** Copy or save (`File > Save As...`) the Results table for trajectory plotting in Python, R, MATLAB, or Excel.
+
+> **Note:** Whole-stack mode processes one nucleus per frame. For multi-nuclei fields of view, crop individual nuclei into separate stacks first, or generate per-nucleus mask stacks using an external segmentation/tracking pipeline and use Mode 3.
+
 ## Modes
 
 > ⚠️ **Stack processing note:** For single time-point images, multiple nuclei per field of view are fully supported. For time-series (stack) data, the field of view should contain a **single nucleus** — whole-stack mode does not perform multi-object tracking across time points. For multi-nuclei time-lapse data, either (1) crop individual nuclei into separate single-nucleus stacks, or (2) generate per-nucleus binary mask stacks using your own segmentation/tracking pipeline, then use Mode 3 (Binary Mask, whole stack) to compute metrics.
