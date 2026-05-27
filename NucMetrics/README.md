@@ -92,7 +92,7 @@ Try NucMetrics using the example images provided in this repository.
 
 This test demonstrates frame-by-frame batch processing of an entire time-lapse movie for trajectory quantification.
 
-1. Open `example_data/Single_nuc_timlapse.tif` in Fiji (a 49-frame time-lapse of a single dHL-60 nucleus undergoing NETosis)
+1. Open `example_data/Single_nuc_timelapse.tif` in Fiji (a 49-frame time-lapse of a single dHL-60 nucleus undergoing NETosis)
 2. Click the NucMetrics icon
 3. Select **Auto-Generate Binary Mask** mode → click OK
 4. In the settings dialog:
