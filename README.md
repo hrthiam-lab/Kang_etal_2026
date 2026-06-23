@@ -72,12 +72,14 @@ Python scripts for generating all manuscript figures are in the [`Figures/`](Fig
 | `fig1_metric_explanation.py` | Fig. 1 — Metric definitions and illustration |
 | `fig2_live_cell_tracking.py` | Fig. 2 — Live-cell trajectory analysis |
 | `fig3_tn5_correlation.py` | Fig. 3 — Correlation with Tn5/ATAC-see |
+| `fig4_u2os.py` | Fig. 4 — U2OS mitotic chromatin reorganization analysis |
 | `suppfig1_threshold_sweep.py` | Supp. Fig. 1 — DSI threshold selection |
+| `suppfig2_shotnoise_simulation.py` | Supp. Fig. 2 — Photon-count-dependent shot-noise simulation |
 
 ## Repository structure
 
 ```
-Kang_2026_DSI_paper/
+Kang_etal_2026/
 ├── NucMetrics/
 │   ├── NucMetrics_Toolset.ijm    # Fiji macro toolset
 │   ├── NucMetrics_toolbar.png    # Toolbar icon screenshot
@@ -86,7 +88,9 @@ Kang_2026_DSI_paper/
 │   ├── fig1_metric_explanation.py
 │   ├── fig2_live_cell_tracking.py
 │   ├── fig3_tn5_correlation.py
-│   └── suppfig1_threshold_sweep.py
+│   ├── fig4_u2os.py
+│   ├── suppfig1_threshold_sweep.py
+│   └── suppfig2_shotnoise_simulation.py
 ├── example_data/                 # Sample images and masks for testing and validation
 ├── LICENSE
 └── README.md
