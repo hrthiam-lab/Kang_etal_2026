@@ -661,8 +661,7 @@ function modeAutoSegGenerateMaskAndMaybeCompute(imgID, savedCh, savedSl, savedFr
 
         Dialog.createNonBlocking("NucMetrics - Auto-Generate Binary Mask");
         Dialog.addMessage("A binary mask is generated first and shown in a new window.\n"
-            + "Metrics are computed only after you review and confirm that mask.\n"
-            + "You can return to this dialog from the review step to re-adjust these settings.");
+            + "Metrics are computed only after you review and confirm that mask.");
         Dialog.addChoice("Threshold method:",
             newArray("Li", "Otsu", "Triangle"), AUTO_THRESH_METHOD);
         Dialog.addNumber("Min nucleus area (px):", MIN_AREA);
@@ -785,21 +784,19 @@ function reviewAutoMask(maskID, isSeries) {
 
     msg = "Generated mask: " + maskTitle + "\n \n";
     if (isSeries && nPlanes > 1) {
-        msg = msg + "This dialog does not block the image windows.\n"
-            + "Scroll through all " + nPlanes + " mask planes with the stack slider,\n"
-            + "the \"<\" and \">\" keys, or the mouse wheel, and compare them with\n"
-            + "the original image before you decide.\n \n";
+        msg = msg + "Scroll through all " + nPlanes + " mask planes and compare them\n"
+            + "with the original image before you decide.\n \n";
     } else {
-        msg = msg + "This dialog does not block the image windows, so you can zoom,\n"
-            + "pan, and compare the mask with the original image before you decide.\n \n";
+        msg = msg + "Compare the mask with the original image before you decide.\n \n";
     }
-    msg = msg + "Not satisfied? Choose \"" + REVIEW_ADJUST + "\"\n"
-        + "to go back to the settings dialog (threshold method, min area, edge\n"
-        + "exclusion) and regenerate the mask without restarting NucMetrics.";
+    msg = msg + "If the segmentation is not good, choose\n"
+        + "\"" + REVIEW_ADJUST + "\" to change the\n"
+        + "threshold method, minimum area, or edge exclusion\n"
+        + "and regenerate the mask.";
 
     defaultChoice = REVIEW_COMPUTE;
     if (maskIsEmpty) {
-        msg = "WARNING: the generated mask is empty (no objects found).\n"
+        msg = "No objects were found in the generated mask.\n"
             + "Try another threshold method or a smaller minimum area.\n \n" + msg;
         defaultChoice = REVIEW_ADJUST;
     }
