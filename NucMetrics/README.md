@@ -81,8 +81,11 @@ Try NucMetrics using the example images provided in this repository.
 1. Open `example_data/multiple_nuc.tif` in Fiji
 2. Click the NucMetrics icon
 3. Select **Auto-Generate Binary Mask** mode → choose a threshold method (Li is the default and works well for this example; try Li, Otsu, or Triangle and compare) → click OK
-4. Review the generated mask in the new window
-5. Click OK to compute metrics, or Cancel to keep the mask for manual editing
+4. Review the generated mask in the new window. The review dialog does not block the image windows, so you can zoom, pan, and compare the mask against the original while it is open
+5. In the review dialog, choose one of:
+   - **Compute NucMetrics with this mask** — measure using this mask
+   - **Go back and adjust the mask settings** — return to the settings dialog, change the threshold method / min area / edge exclusion, and regenerate the mask (no need to cancel and start over)
+   - **Stop and keep the generated mask only** — keep the mask window for manual editing
 
 > **Tip:** The built-in auto-thresholding may not work well for all datasets. If you have a segmentation pipeline that produces better masks for your data, save the mask as a binary image and use **Mode 3 (Binary Mask)** instead.
 
@@ -101,8 +104,8 @@ This test demonstrates frame-by-frame batch processing of an entire time-lapse m
    - Under **Stack options**, check **"Generate mask for an entire series"**
    - Click OK
 5. NucMetrics generates a binary mask stack for all 49 frames and displays it in a new window
-6. Scroll through the mask stack to verify segmentation quality across time points
-7. Click **OK** in the "Review Auto Mask" dialog to compute metrics
+6. The "Review Auto Mask" dialog opens without blocking the image windows. Scroll through all 49 mask planes with the stack slider, the `<` / `>` keys, or the mouse wheel to verify segmentation quality across time points
+7. In the review dialog, select **Compute NucMetrics with this mask** and click OK. If the segmentation looks wrong, select **Go back and adjust the mask settings** instead to change the threshold method or minimum area and regenerate the stack
 8. The Results table now contains 49 rows, labeled `T001_N1` through `T049_N1`, with CV, 1-Gini, and DSI for each frame
 9. Export the Results table (`File > Save As...`) for trajectory plotting in Python, R, or Excel
 
@@ -123,7 +126,7 @@ NucMetrics supports frame-by-frame batch processing of time-lapse stacks for tra
    **Option A — Auto-generate masks (Mode 4):**
    - Click the NucMetrics icon → select **Auto-Generate Binary Mask**
    - Select **Entire series** when prompted
-   - Review the generated mask stack → click OK to compute metrics
+   - Scroll through the generated mask stack in the non-blocking review dialog → choose **Compute NucMetrics with this mask**, or **Go back and adjust the mask settings** to retry with different parameters
 
    **Option B — Use pre-made masks (Mode 3):**
    - Open your binary mask stack alongside the image stack (must have matching dimensions)
@@ -164,9 +167,18 @@ Use an external binary mask image to define nuclear regions. The mask image must
 Automatically generate a binary mask using intensity thresholding (Li, Otsu, or Triangle), followed by morphological cleanup (fill holes, opening) and particle analysis.
 
 **Workflow:**
-1. NucMetrics generates a binary mask and displays it in a new window
-2. Review the mask visually
-3. Click OK to compute metrics using the generated mask, or Cancel to keep the mask only for manual editing
+1. Set the mask parameters (threshold method, minimum nucleus area, edge exclusion, stack options)
+2. NucMetrics generates a binary mask and displays it in a new window
+3. Review the mask. The review dialog is non-blocking: the image windows stay interactive, so a generated mask **stack** can be scrolled plane by plane and compared with the original before you commit to it
+4. Choose what happens next:
+
+| Review option | Effect |
+|---------------|--------|
+| Compute NucMetrics with this mask | Measures CV, 1-Gini and DSI using the generated mask |
+| Go back and adjust the mask settings | Reopens the settings dialog, regenerates the mask, and returns to this review step — repeat as often as needed |
+| Stop and keep the generated mask only | Leaves the mask window open for manual editing (then use Mode 3) |
+
+If the generated mask contains no objects at all, the review dialog says so up front and preselects the "adjust settings" option.
 
 **Stack support:**
 - **Single slice:** Generates a mask for the currently displayed slice

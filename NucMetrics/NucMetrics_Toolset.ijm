@@ -35,8 +35,13 @@
 //   - Auto-Generate Binary Mask: generate, review, then optionally compute
 //   - Hyperstack auto-mask: choose current C/Z across T or current C/T across Z
 //   - Improved ImageJ (non-Fiji) compatibility for stack handling
+//   - Mask review is now non-blocking: the generated mask stack can be scrolled
+//     plane by plane while the review dialog is open
+//   - Mask review can send the user back to the mask settings dialog to
+//     regenerate the mask, instead of cancelling and starting over
+//   - Mask review warns when the generated mask contains no objects
 //
-// Created: 2026-04-01 | Updated: 2026-04-03
+// Created: 2026-04-01 | Updated: 2026-08-17
 // Authors: Minwoo Kang Ph.D.
 //          HR Thiam Lab, Stanford University
 // License: MIT
@@ -46,6 +51,13 @@
 var DSI_THRESHOLD = 0.3;
 var MIN_AREA = 30;
 var AUTO_THRESH_METHOD = "Li";
+
+// ---- Fixed dialog labels (Auto-Generate Binary Mask) ----
+var AXIS_T_LABEL = "Current channel + current Z across time (T)";
+var AXIS_Z_LABEL = "Current channel + current time across Z";
+var REVIEW_COMPUTE = "Compute NucMetrics with this mask";
+var REVIEW_ADJUST = "Go back and adjust the mask settings";
+var REVIEW_KEEP = "Stop and keep the generated mask only";
 
 // =========================================================================
 // TOOLBAR ICON
@@ -211,52 +223,8 @@ function runNucMetrics() {
             autoSeriesLabel = "S";
         }
 
-        Dialog.create("NucMetrics - Auto-Generate Binary Mask");
-        Dialog.addMessage("This mode now generates a binary mask first.\nIt shows the mask in a new window, and computes metrics only after you confirm the mask.");
-        Dialog.addChoice("Threshold method:",
-            newArray("Li", "Otsu", "Triangle"), AUTO_THRESH_METHOD);
-        Dialog.addNumber("Min nucleus area (px):", MIN_AREA);
-        Dialog.addCheckbox("Exclude nuclei touching edges", true);
-        if (channels > 1) {
-            Dialog.addMessage("Active channel only: C" + origChannel);
-        }
-        if (isStack) {
-            Dialog.addMessage("--- Stack options ---");
-            Dialog.addCheckbox("Generate mask for an entire series", false);
-            if (showAxisChoice) {
-                Dialog.addChoice("Series axis:",
-                    newArray("Current channel + current Z across time (T)",
-                             "Current channel + current time across Z"),
-                    "Current channel + current Z across time (T)");
-            } else if (imgIsHyper && frames > 1) {
-                Dialog.addMessage("Series axis: current channel + current Z across time (T)");
-            } else if (imgIsHyper && slices > 1) {
-                Dialog.addMessage("Series axis: current channel + current time across Z");
-            } else {
-                Dialog.addMessage("Series axis: plain stack order (S)");
-            }
-        }
-        Dialog.show();
-        AUTO_THRESH_METHOD = Dialog.getChoice();
-        MIN_AREA = Dialog.getNumber();
-        excludeEdges = Dialog.getCheckbox();
-        processAllSlices = false;
-        if (isStack) {
-            processAllSlices = Dialog.getCheckbox();
-            if (showAxisChoice) {
-                axisChoice = Dialog.getChoice();
-                if (axisChoice == "Current channel + current Z across time (T)") {
-                    autoSeriesMode = "frames";
-                    autoSeriesLabel = "T";
-                } else {
-                    autoSeriesMode = "slices";
-                    autoSeriesLabel = "Z";
-                }
-            }
-        }
-
-        modeAutoSegGenerateMaskAndMaybeCompute(originalID, processAllSlices,
-            excludeEdges, origChannel, origSlice, origFrame, autoSeriesMode, autoSeriesLabel);
+        modeAutoSegGenerateMaskAndMaybeCompute(originalID, origChannel, origSlice, origFrame,
+            isStack, showAxisChoice, imgIsHyper, autoSeriesMode, autoSeriesLabel);
 
     } else if (mode == "Binary Mask") {
         maskList = newArray(0);
@@ -668,33 +636,212 @@ function modeBinaryMaskAllSlicesForced(imgID, maskID, savedCh, savedSl, savedFr,
 }
 
 // =========================================================================
-// MODE 4: Auto-Generate Binary Mask -> generate binary mask, review, then compute
+// MODE 4: Auto-Generate Binary Mask
+//   settings -> generate mask -> review -> compute / re-adjust / stop
+//
+// Both the settings dialog and the review dialog are non-blocking, so the
+// image and the generated mask stack stay fully interactive (scrollable)
+// while a dialog is open. From the review step the user can go straight
+// back to the settings dialog instead of cancelling and starting over.
 // =========================================================================
-function modeAutoSegGenerateMaskAndMaybeCompute(imgID, processAllSlices, excludeEdges,
-    savedCh, savedSl, savedFr, seriesMode, seriesLabel) {
+function modeAutoSegGenerateMaskAndMaybeCompute(imgID, savedCh, savedSl, savedFr,
+    isStack, showAxisChoice, imgIsHyper, seriesMode, seriesLabel) {
 
-    if (processAllSlices) {
-        maskID = generateAutoMaskStack(imgID, excludeEdges, savedCh, savedSl, savedFr, seriesMode);
-    } else {
-        maskID = generateAutoMaskSingle(imgID, excludeEdges, savedCh, savedSl, savedFr);
+    excludeEdges = true;
+    processAllSlices = false;
+    axisChoice = AXIS_T_LABEL;
+    prevMaskID = 0;
+    maskID = 0;
+    decision = REVIEW_ADJUST;
+
+    while (true) {
+        // ---- STEP A: mask settings ----
+        selectImage(imgID);
+        getDimensions(w, h, channels, slices, frames);
+
+        Dialog.createNonBlocking("NucMetrics - Auto-Generate Binary Mask");
+        Dialog.addMessage("A binary mask is generated first and shown in a new window.\n"
+            + "Metrics are computed only after you review and confirm that mask.\n"
+            + "You can return to this dialog from the review step to re-adjust these settings.");
+        Dialog.addChoice("Threshold method:",
+            newArray("Li", "Otsu", "Triangle"), AUTO_THRESH_METHOD);
+        Dialog.addNumber("Min nucleus area (px):", MIN_AREA);
+        Dialog.addCheckbox("Exclude nuclei touching edges", excludeEdges);
+        if (channels > 1) {
+            Dialog.addMessage("Active channel only: C" + savedCh);
+        }
+        if (isStack) {
+            Dialog.addMessage("--- Stack options ---");
+            Dialog.addCheckbox("Generate mask for an entire series", processAllSlices);
+            if (showAxisChoice) {
+                Dialog.addChoice("Series axis:",
+                    newArray(AXIS_T_LABEL, AXIS_Z_LABEL), axisChoice);
+            } else if (imgIsHyper && frames > 1) {
+                Dialog.addMessage("Series axis: current channel + current Z across time (T)");
+            } else if (imgIsHyper && slices > 1) {
+                Dialog.addMessage("Series axis: current channel + current time across Z");
+            } else {
+                Dialog.addMessage("Series axis: plain stack order (S)");
+            }
+        }
+        Dialog.show();
+
+        AUTO_THRESH_METHOD = Dialog.getChoice();
+        MIN_AREA = Dialog.getNumber();
+        excludeEdges = Dialog.getCheckbox();
+        processAllSlices = false;
+        if (isStack) {
+            processAllSlices = Dialog.getCheckbox();
+            if (showAxisChoice) {
+                axisChoice = Dialog.getChoice();
+                if (axisChoice == AXIS_T_LABEL) {
+                    seriesMode = "frames";
+                    seriesLabel = "T";
+                } else {
+                    seriesMode = "slices";
+                    seriesLabel = "Z";
+                }
+            }
+        }
+
+        // ---- STEP B: generate the mask ----
+        // The dialogs are non-blocking, so the user could have closed the source
+        // image in the meantime.
+        if (!imageIsOpen(imgID)) {
+            exit("The original image window was closed.\nNucMetrics stopped.");
+        }
+
+        // The previous attempt is discarded only once new settings are confirmed,
+        // so it stays visible for comparison while the settings dialog is open.
+        closeImageIfOpen(prevMaskID);
+        prevMaskID = 0;
+
+        if (processAllSlices) {
+            maskID = generateAutoMaskStack(imgID, excludeEdges, savedCh, savedSl, savedFr, seriesMode);
+        } else {
+            maskID = generateAutoMaskSingle(imgID, excludeEdges, savedCh, savedSl, savedFr);
+        }
+
+        selectImage(maskID);
+        if (processAllSlices) {
+            print("\n[NucMetrics] Generated binary mask stack: " + getTitle()
+                + " (" + AUTO_THRESH_METHOD + ", min area " + MIN_AREA + " px)");
+        } else {
+            print("\n[NucMetrics] Generated binary mask image: " + getTitle()
+                + " (" + AUTO_THRESH_METHOD + ", min area " + MIN_AREA + " px)");
+        }
+
+        // ---- STEP C: review ----
+        decision = reviewAutoMask(maskID, processAllSlices);
+
+        if (decision == REVIEW_ADJUST) {
+            prevMaskID = maskID;
+            continue;
+        }
+        if (decision == REVIEW_KEEP) {
+            selectImage(maskID);
+            print("[NucMetrics] Stopped after mask generation. The mask window was kept "
+                + "for manual editing; run Mode 3 (Binary Mask) on it when ready.");
+            return;
+        }
+        break;
     }
 
-    selectImage(maskID);
-    if (processAllSlices) {
-        print("\n[NucMetrics] Generated binary mask stack: " + getTitle());
-    } else {
-        print("\n[NucMetrics] Generated binary mask image: " + getTitle());
+    // ---- STEP D: compute ----
+    if (!imageIsOpen(imgID) || !imageIsOpen(maskID)) {
+        exit("The image or the mask window was closed during review.\nNucMetrics stopped.");
     }
-
-    showMessageWithCancel("NucMetrics - Review Auto Mask",
-        "A binary mask has been generated in a new window.\n\n"
-        + "Review the mask and click OK to compute NucMetrics using this mask.\n"
-        + "Click Cancel to stop and keep the generated mask only.");
-
     if (processAllSlices) {
         modeBinaryMaskAllSlicesForced(imgID, maskID, savedCh, savedSl, savedFr, seriesMode, seriesLabel);
     } else {
         modeBinaryMask(imgID, maskID);
+    }
+}
+
+// =========================================================================
+// HELPER: Non-blocking mask review step
+// The dialog does not block the image windows, so the generated mask stack
+// can be scrolled (slider, "<" / ">" keys, or mouse wheel) while it is open.
+// =========================================================================
+function reviewAutoMask(maskID, isSeries) {
+    selectImage(maskID);
+    maskTitle = getTitle();
+    nPlanes = nSlices;
+    if (isSeries && nPlanes > 1) {
+        setSlice(1);
+    }
+    run("Select None");
+    updateDisplay();
+
+    // Cheap emptiness check so a failed threshold is caught before measuring.
+    maskIsEmpty = false;
+    if (nPlanes > 1) {
+        Stack.getStatistics(vCount, vMean, vMin, vMax, vStd);
+        maskIsEmpty = (vMax == 0);
+    } else {
+        getStatistics(sArea, sMean, sMin, sMax, sStd);
+        maskIsEmpty = (sMax == 0);
+    }
+
+    msg = "Generated mask: " + maskTitle + "\n \n";
+    if (isSeries && nPlanes > 1) {
+        msg = msg + "This dialog does not block the image windows.\n"
+            + "Scroll through all " + nPlanes + " mask planes with the stack slider,\n"
+            + "the \"<\" and \">\" keys, or the mouse wheel, and compare them with\n"
+            + "the original image before you decide.\n \n";
+    } else {
+        msg = msg + "This dialog does not block the image windows, so you can zoom,\n"
+            + "pan, and compare the mask with the original image before you decide.\n \n";
+    }
+    msg = msg + "Not satisfied? Choose \"" + REVIEW_ADJUST + "\"\n"
+        + "to go back to the settings dialog (threshold method, min area, edge\n"
+        + "exclusion) and regenerate the mask without restarting NucMetrics.";
+
+    defaultChoice = REVIEW_COMPUTE;
+    if (maskIsEmpty) {
+        msg = "WARNING: the generated mask is empty (no objects found).\n"
+            + "Try another threshold method or a smaller minimum area.\n \n" + msg;
+        defaultChoice = REVIEW_ADJUST;
+    }
+
+    Dialog.createNonBlocking("NucMetrics - Review Auto Mask");
+    Dialog.addMessage(msg);
+    Dialog.addChoice("Next step:",
+        newArray(REVIEW_COMPUTE, REVIEW_ADJUST, REVIEW_KEEP), defaultChoice);
+    Dialog.show();
+    return Dialog.getChoice();
+}
+
+// =========================================================================
+// HELPER: Is this image ID still open?
+// Needed because the non-blocking dialogs let the user close windows.
+// =========================================================================
+function imageIsOpen(imgID) {
+    if (imgID == 0) {
+        return false;
+    }
+    for (i = 1; i <= nImages; i++) {
+        selectImage(i);
+        if (getImageID() == imgID) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// =========================================================================
+// HELPER: Close an image by ID only if that window is still open
+// =========================================================================
+function closeImageIfOpen(imgID) {
+    if (imgID == 0) {
+        return;
+    }
+    for (i = 1; i <= nImages; i++) {
+        selectImage(i);
+        if (getImageID() == imgID) {
+            close();
+            return;
+        }
     }
 }
 
