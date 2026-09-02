@@ -13,7 +13,7 @@ File naming convention (in compact/ and decompact/ folders):
     <date>_<Dish>_compact_img.tif   / _mask.tif
     <date>_<Dish>_decompact_img.tif / _mask.tif
 
-Author: Minwoo Kang Ph.D., Hawa Thiam Lab, Stanford University
+Author: Minwoo Kang Ph.D., HR Thiam Lab, Stanford University
 """
 
 import os

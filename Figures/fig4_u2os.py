@@ -39,6 +39,8 @@ Output:
   - Generates Figure 4B-D as one 1 × 3 vector figure.
   - SVG text remains editable in Adobe Illustrator.
   - Final physical dimensions are specified in millimeters.
+
+Author: Minwoo Kang Ph.D., HR Thiam Lab, Stanford University
 """
 # =====================================================================
 

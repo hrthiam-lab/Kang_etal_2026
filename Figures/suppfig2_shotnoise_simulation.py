@@ -14,6 +14,8 @@
 # N=500 Poisson shot-noise simulations per condition (mean +/- SD).
 # Models photon shot noise only (Poisson); sCMOS read noise NOT added
 # (consistent with Longo et al.).
+
+Author: Minwoo Kang Ph.D., HR Thiam Lab, Stanford University
 # =====================================================================
 
 import numpy as np

@@ -8,7 +8,7 @@ Panel layout (1 row × 3 columns):
 
 Statuses shown: Bef Nuclear rounding, Nuclear rounding
 
-Author: Minwoo Kang Ph.D., Hawa Thiam Lab, Stanford University
+Author: Minwoo Kang Ph.D., HR Thiam Lab, Stanford University
 """
 
 import os

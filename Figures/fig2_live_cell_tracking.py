@@ -9,7 +9,7 @@ Statistical tests:
   - Time-series: Brunner-Munzel + BH FDR correction
   - Trajectory-level: Mann-Whitney U (two-sided)
 
-Author: Minwoo Kang Ph.D., Hawa Thiam Lab, Stanford University
+Author: Minwoo Kang Ph.D., HR Thiam Lab, Stanford University
 """
 
 import os
