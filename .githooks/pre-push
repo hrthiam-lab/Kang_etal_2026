@@ -1,0 +1,28 @@
+#!/bin/sh
+set -eu
+. "$(dirname -- "$0")/attribution.sh"
+# Buffer input so Git LFS can inspect the same updates after validation.
+guard_updates=$(cat)
+if ! printf '%s\n' "$guard_updates" |
+    while read -r guard_local_ref guard_local_oid guard_remote_ref guard_remote_oid; do
+        [ -n "$guard_local_ref" ] || continue
+        # Deleting a reference cannot introduce contributor metadata.
+        case "$guard_local_oid" in ''|*[!0]*) ;; *) continue ;; esac
+        case "$guard_local_ref $guard_remote_ref" in
+            *refs/heads/backup/*|*refs/original/*)
+                guard_fail 'Recovery/backup references must remain local.'
+                exit 1 ;;
+        esac
+        # Scan all reachable commits, not just the tip or new commits.
+        # This catches old attribution reintroduced by a merge or a tag.
+        if ! guard_history "$guard_local_oid"; then
+            guard_fail "Push to $guard_remote_ref blocked; preserve your work and repair attribution first."
+            exit 1
+        fi
+    done
+then
+    exit 1
+fi
+if git lfs version >/dev/null 2>&1; then
+    printf '%s\n' "$guard_updates" | git lfs pre-push "$@"
+fi

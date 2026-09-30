@@ -1,0 +1,6 @@
+#!/bin/sh
+set -eu
+. "$(dirname -- "$0")/attribution.sh"
+guard_pending_identity
+guard_message < "$1"
+guard_pending_history
